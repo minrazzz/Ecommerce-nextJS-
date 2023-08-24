@@ -1,3 +1,5 @@
+"use client";
+
 export const navOptions = [
    {
       id: "home",
@@ -199,6 +201,11 @@ export const firebaseConfig = {
 };
 
 export const firebaseStroageURL = "YOUR_FIREBASE_STROAGE_URL";
+
+export const styles = {
+   button:
+      "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upper-case tracking-wide text-white rounded",
+};
 
 export const addNewAddressFormControls = [
    {

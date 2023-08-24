@@ -1,7 +1,9 @@
 "use client";
 
-import { adminNavOptions, navOptions } from "@/utils/nav-options";
-import { Fragment } from "react";
+import { GlobalContext } from "@/context/global-context";
+import { adminNavOptions, navOptions, styles } from "@/utils/nav-options";
+import { Fragment, useContext } from "react";
+import CommonModel from "./commonModel";
 
 const isAdminView = false;
 const isAuthUser = true;
@@ -9,14 +11,16 @@ const user = {
    role: "admin",
 };
 
-function NavItems() {
+function NavItems({ isModalView = false }) {
    return (
       <>
          <div
-            className="items-center justify-between w-full md:flex md:w-auto"
+            className={`items-center justify-between w-full md:flex md:w-auto ${
+               isModalView === true ? "" : "hidden"
+            }`}
             id="nav-items"
          >
-            <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 bg-white">
+            <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium  rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 bg-white">
                {isAdminView
                   ? adminNavOptions.map((item) => (
                        <li
@@ -40,7 +44,7 @@ function NavItems() {
    );
 }
 
-function HamburgerMenu() {
+function HamburgerMenu({ setShowNavModal }) {
    return (
       <>
          <button
@@ -49,7 +53,7 @@ function HamburgerMenu() {
             className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             aria-controls="navbar-sticky"
             aria-expanded="false"
-            // onClick={() => setShowNavModal(true)}
+            onClick={() => setShowNavModal(true)}
          >
             <span className="sr-only">Open main menu</span>
             <svg
@@ -60,9 +64,9 @@ function HamburgerMenu() {
                xmlns="http://www.w3.org/2000/svg"
             >
                <path
-                  fill-rule="evenodd"
+                  fillRule="evenodd"
                   d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
-                  clip-rule="evenodd"
+                  clipRule="evenodd"
                ></path>
             </svg>
          </button>
@@ -71,6 +75,7 @@ function HamburgerMenu() {
 }
 
 export default function Navbar() {
+   const { showNavModal, setShowNavModal } = useContext(GlobalContext);
    return (
       <>
          <nav className="bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200 ">
@@ -83,27 +88,35 @@ export default function Navbar() {
                <div className="flex md:order-2 gap-2">
                   {!isAdminView && isAuthUser ? (
                      <Fragment>
-                        <button>Account</button>
-                        <button>Cart</button>
+                        <button className={styles.button}>Account</button>
+                        <button className={styles.button}>Cart</button>
                      </Fragment>
                   ) : null}
                   {isAuthUser && user?.role === "admin" ? (
                      isAdminView ? (
-                        <Fragment>client</Fragment>
+                        <button className={styles.button}>client</button>
                      ) : (
-                        <button>Admin View</button>
+                        <button className={styles.button}>Admin View</button>
                      )
                   ) : null}
                   {isAuthUser ? (
-                     <button>Logout</button>
+                     <button className={styles.button}>Logout</button>
                   ) : (
-                     <button>Login</button>
+                     <button className={styles.button}>Login</button>
                   )}
-                  <HamburgerMenu />
+
+                  <HamburgerMenu setShowNavModal={setShowNavModal} />
                </div>
+
                <NavItems />
             </div>
          </nav>
+         <CommonModel
+            show={showNavModal}
+            setShow={setShowNavModal}
+            mainContent={<NavItems isModalView={true} />}
+            showModalTitle={false}
+         />
       </>
    );
 }
