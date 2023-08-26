@@ -5,7 +5,7 @@ import { adminNavOptions, navOptions, styles } from "@/utils/nav-options";
 import { Fragment, useContext } from "react";
 import CommonModel from "./commonModel";
 
-const isAdminView = false;
+const isAdminView = true;
 const isAuthUser = true;
 const user = {
    role: "admin",
