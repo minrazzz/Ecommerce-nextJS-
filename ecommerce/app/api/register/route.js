@@ -1,3 +1,4 @@
+import connectDB from "@/backend/database/dbConnect";
 import UserModel from "@/backend/models/user";
 import { hash } from "bcryptjs";
 import Joi from "joi";
