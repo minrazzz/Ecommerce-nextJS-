@@ -2,9 +2,20 @@
 import InputComponent from "@/components/form-elements/InputComponent";
 import SelectComponent from "@/components/form-elements/SelectComponent";
 import { registrationFormControls } from "@/utils/nav-options";
+import { useState } from "react";
+
+const initialFormData = {
+   name: "",
+   email: "",
+   password: "",
+   role: "",
+};
+
+const isRegistered = false;
 
 export default function register() {
-   const isRegistered = false;
+   const [formData, setFormData] = useState(initialFormData);
+   console.log(formData);
    return (
       <div className="bg-white relative">
          <div className="  flex flex-col items-center justify-between pt-0 pr-10 pb-0 pl-10 mt-8 mr-auto  xl:px-5 lg:flex-row">
@@ -32,11 +43,25 @@ export default function register() {
                                        type={item.type}
                                        placeholder={item.placeholder}
                                        label={item.label}
+                                       onChange={(event) => {
+                                          setFormData({
+                                             ...formData,
+                                             [item.id]: event.target.value,
+                                          });
+                                       }}
+                                       value={formData[item.id]}
                                     />
                                  ) : item.componentType === "select" ? (
                                     <SelectComponent
                                        options={item.options}
                                        label={item.label}
+                                       onChange={(event) => {
+                                          setFormData({
+                                             ...formData,
+                                             [item.id]: event.target.value,
+                                          });
+                                       }}
+                                       value={formData[item.id]}
                                     />
                                  ) : null
                               )}
