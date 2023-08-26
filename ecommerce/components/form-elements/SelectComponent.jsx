@@ -7,26 +7,26 @@ export default function SelectComponent({
    return (
       <>
          <div className="relative">
-            <p className="pt-0 pr-2 pb-0 pl-2 -mt-3 mr-0 mb-0 ml-2 font-medium text-gray-600">
+            <p className="bg-white absolute pt-0 pr-2 pb-0 pl-2 -mt-3 mr-0 mb-0 ml-2 font-medium text-gray-600">
                {label}
             </p>
             <select
                value={value}
                onChange={onChange}
-               className="border placeholder-gray-400 focus:outline-none focus:border-black w-ful p-4 mr-0 mt-0 ml-0 text-base bg-white border-gray-300"
+               className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-4 mr-0 mt-0 ml-0 text-base bg-white border-gray-300"
             >
                {options && options.length ? (
                   options.map((optionItem) => (
-                     <options
+                     <option
                         id={optionItem.id}
                         value={optionItem.id}
                         key={optionItem.id}
                      >
-                        {optionItem}
-                     </options>
+                        {optionItem.label}
+                     </option>
                   ))
                ) : (
-                  <options value={""}>Select</options>
+                  <option value={""}>Select</option>
                )}
             </select>
          </div>

@@ -1,11 +1,11 @@
 "use client";
 
 import { GlobalContext } from "@/context/global-context";
-import { adminNavOptions, navOptions, styles } from "@/utils/nav-options";
+import { adminNavOptions, navOptions } from "@/utils/nav-options";
 import { Fragment, useContext } from "react";
 import CommonModel from "./commonModel";
 
-const isAdminView = true;
+const isAdminView = false;
 const isAuthUser = true;
 const user = {
    role: "admin",
@@ -88,21 +88,57 @@ export default function Navbar() {
                <div className="flex md:order-2 gap-2">
                   {!isAdminView && isAuthUser ? (
                      <Fragment>
-                        <button className={styles.button}>Account</button>
-                        <button className={styles.button}>Cart</button>
+                        <button
+                           className={
+                              "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upper-case tracking-wide text-white rounded"
+                           }
+                        >
+                           Account
+                        </button>
+                        <button
+                           className={
+                              "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upper-case tracking-wide text-white rounded"
+                           }
+                        >
+                           Cart
+                        </button>
                      </Fragment>
                   ) : null}
                   {isAuthUser && user?.role === "admin" ? (
                      isAdminView ? (
-                        <button className={styles.button}>client</button>
+                        <button
+                           className={
+                              "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upper-case tracking-wide text-white rounded"
+                           }
+                        >
+                           client
+                        </button>
                      ) : (
-                        <button className={styles.button}>Admin View</button>
+                        <button
+                           className={
+                              "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upper-case tracking-wide text-white rounded"
+                           }
+                        >
+                           Admin View
+                        </button>
                      )
                   ) : null}
                   {isAuthUser ? (
-                     <button className={styles.button}>Logout</button>
+                     <button
+                        className={
+                           "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upper-case tracking-wide text-white rounded"
+                        }
+                     >
+                        Logout
+                     </button>
                   ) : (
-                     <button className={styles.button}>Login</button>
+                     <button
+                        className={
+                           "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upper-case tracking-wide text-white rounded"
+                        }
+                     >
+                        Login
+                     </button>
                   )}
 
                   <HamburgerMenu setShowNavModal={setShowNavModal} />
