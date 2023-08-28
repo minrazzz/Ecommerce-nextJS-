@@ -23,7 +23,7 @@ export async function POST(req) {
    if (error) {
       return NextResponse.json({
          success: false,
-         message: error.details[0],
+         message: error.details[0].message,
       });
    }
    try {
@@ -35,7 +35,7 @@ export async function POST(req) {
             message: "User already exists. Please try with different email",
          });
       } else {
-         const hashPassword = await hash(password, 12);
+         const hashPassword = await hash(password, 12); //to convert password to hash before create new user
 
          const newlyCreatedUser = await UserModel.create({
             name,

@@ -1,12 +1,35 @@
 "use client";
 
+import { login } from "@/backend/services/login/loginService";
 import InputComponent from "@/components/form-elements/InputComponent";
 import { loginFormControls } from "@/utils/nav-options";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
+
+const initialFormData = {
+   email: "",
+   password: "",
+};
 
 export default function page() {
+   const [formData, setFormData] = useState(initialFormData);
+   // console.log(formData);
    const router = useRouter();
+
+   function isFormValid() {
+      return formData &&
+         formData.email &&
+         formData.email.trim() !== "" &&
+         formData.password &&
+         formData.password.trim() !== ""
+         ? true
+         : false;
+   }
+
+   async function handleLogin() {
+      const response = await login(formData);
+      console.log(response);
+   }
 
    return (
       <div className="bg-white relative">
@@ -19,23 +42,28 @@ export default function page() {
                      </p>
 
                      <div className="w-full mt-6 mr-0 mb-0 ml-0 relative space-y-8">
-                        {loginFormControls.map((item) =>
+                        {loginFormControls.map((item, key) =>
                            item.componentType === "input" ? (
                               <InputComponent
+                                 key={key}
                                  type={item.type}
                                  placeholder={item.placeholder}
                                  label={item.label}
-                              />
-                           ) : item.componentType === "select" ? (
-                              <SelectComponent
-                                 options={item.options}
-                                 label={item.label}
+                                 value={formData[item.id]}
+                                 onChange={(e) =>
+                                    setFormData({
+                                       ...formData,
+                                       [item.id]: e.target.value,
+                                    })
+                                 }
                               />
                            ) : null
                         )}
                         <button
-                           className="inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white transition-all duration-200 ease-in-out
-                         focus:shadow font-medium uppercase tracking-wide "
+                           className="disabled:opacity-50 inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white transition-all duration-200 ease-in-out
+                         focus:shadow font-medium uppercase tracking-wide"
+                           disabled={!isFormValid()}
+                           onClick={handleLogin}
                         >
                            Login
                         </button>

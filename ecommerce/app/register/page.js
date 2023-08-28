@@ -3,19 +3,21 @@ import { registerNewUser } from "@/backend/services/register/register";
 import InputComponent from "@/components/form-elements/InputComponent";
 import SelectComponent from "@/components/form-elements/SelectComponent";
 import { registrationFormControls } from "@/utils/nav-options";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const initialFormData = {
    name: "",
    email: "",
    password: "",
-   role: "",
+   role: "Role",
 };
 
 const isRegistered = false;
 
 export default function register() {
    const [formData, setFormData] = useState(initialFormData);
+   const router = useRouter();
 
    function isFormValid() {
       return formData &&
@@ -32,6 +34,11 @@ export default function register() {
    async function handleRegisterOnSubmit() {
       const data = await registerNewUser(formData);
       console.log(data);
+      // if (data.success) {
+      //    // setFormData("");
+      //    router.push("/login");
+      // }
+      router.push("/login");
    }
 
    return (
