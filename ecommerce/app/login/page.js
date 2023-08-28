@@ -2,9 +2,11 @@
 
 import { login } from "@/backend/services/login/loginService";
 import InputComponent from "@/components/form-elements/InputComponent";
+import { GlobalContext } from "@/context/global-context";
 import { loginFormControls } from "@/utils/nav-options";
+import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 const initialFormData = {
    email: "",
@@ -13,6 +15,9 @@ const initialFormData = {
 
 export default function page() {
    const [formData, setFormData] = useState(initialFormData);
+   const { isAuthUser, setIsAuthUser, user, setUser } =
+      useContext(GlobalContext);
+
    // console.log(formData);
    const router = useRouter();
 
@@ -28,8 +33,22 @@ export default function page() {
 
    async function handleLogin() {
       const response = await login(formData);
-      console.log(response);
+      if (response.success) {
+         setIsAuthUser(true);
+         setUser(response?.finalData?.user);
+         setFormData(initialFormData);
+         Cookies.set("token", response?.finalData?.token);
+         localStorage.setItem(
+            "user",
+            JSON.stringify(response?.finalData?.user)
+         );
+      }
    }
+   console.log(isAuthUser);
+
+   useEffect(() => {
+      if (isAuthUser) router.push("/");
+   }, [isAuthUser]);
 
    return (
       <div className="bg-white relative">

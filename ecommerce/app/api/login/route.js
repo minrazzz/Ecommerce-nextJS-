@@ -56,10 +56,10 @@ export async function POST(req) {
       const finalData = {
          token,
          user: {
-            email: checkUser.email,
-            name: checkUser.name,
-            id: checkUser._id,
-            role: checkUser.role,
+            email: checkUser?.email,
+            name: checkUser?.name,
+            id: checkUser?._id,
+            role: checkUser?.role,
          },
       };
 
