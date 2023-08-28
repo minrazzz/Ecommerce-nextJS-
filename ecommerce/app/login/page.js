@@ -2,6 +2,7 @@
 
 import { login } from "@/backend/services/login/loginService";
 import InputComponent from "@/components/form-elements/InputComponent";
+import PageLoader from "@/components/loader/PageLoader";
 import { GlobalContext } from "@/context/global-context";
 import { loginFormControls } from "@/utils/nav-options";
 import Cookies from "js-cookie";
@@ -17,6 +18,7 @@ export default function page() {
    const [formData, setFormData] = useState(initialFormData);
    const { isAuthUser, setIsAuthUser, user, setUser } =
       useContext(GlobalContext);
+   const { pageLoader, setPageLoader } = useContext(GlobalContext);
 
    // console.log(formData);
    const router = useRouter();
@@ -32,8 +34,10 @@ export default function page() {
    }
 
    async function handleLogin() {
+      setPageLoader(true);
       const response = await login(formData);
       if (response.success) {
+         setPageLoader(false);
          setIsAuthUser(true);
          setUser(response?.finalData?.user);
          setFormData(initialFormData);
@@ -44,7 +48,6 @@ export default function page() {
          );
       }
    }
-   console.log(isAuthUser);
 
    useEffect(() => {
       if (isAuthUser) router.push("/");
@@ -84,7 +87,15 @@ export default function page() {
                            disabled={!isFormValid()}
                            onClick={handleLogin}
                         >
-                           Login
+                           {pageLoader ? (
+                              <PageLoader
+                                 text={"signing in"}
+                                 color={"#ffffff"}
+                                 loading={pageLoader}
+                              />
+                           ) : (
+                              "Login"
+                           )}
                         </button>
                         <div className="flex flex-col gap-2">
                            <p>New to website ?</p>

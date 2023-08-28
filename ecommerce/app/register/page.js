@@ -2,9 +2,11 @@
 import { registerNewUser } from "@/backend/services/register/register";
 import InputComponent from "@/components/form-elements/InputComponent";
 import SelectComponent from "@/components/form-elements/SelectComponent";
+import PageLoader from "@/components/loader/PageLoader";
+import { GlobalContext } from "@/context/global-context";
 import { registrationFormControls } from "@/utils/nav-options";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 const initialFormData = {
    name: "",
@@ -13,10 +15,10 @@ const initialFormData = {
    role: "Role",
 };
 
-const isRegistered = false;
-
 export default function register() {
    const [formData, setFormData] = useState(initialFormData);
+   const [isRegistered, setIsRegistered] = useState(false);
+   const { pageLoader, setPageLoader } = useContext(GlobalContext);
    const router = useRouter();
 
    function isFormValid() {
@@ -32,13 +34,15 @@ export default function register() {
    }
 
    async function handleRegisterOnSubmit() {
+      setPageLoader(true);
+
       const data = await registerNewUser(formData);
       console.log(data);
-      // if (data.success) {
-      //    // setFormData("");
-      //    router.push("/login");
-      // }
-      router.push("/login");
+      if (data.success) {
+         setIsRegistered(true);
+         setFormData(initialFormData);
+      } else {
+      }
    }
 
    return (
@@ -56,6 +60,7 @@ export default function register() {
                         <button
                            className="inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white transition-all duration-200 ease-in-out
                          focus:shadow font-medium uppercase tracking-wide "
+                           onClick={() => router.push("/login")}
                         >
                            Login
                         </button>
@@ -98,7 +103,15 @@ export default function register() {
                                  disabled={!isFormValid()}
                                  onClick={handleRegisterOnSubmit}
                               >
-                                 Register
+                                 {pageLoader ? (
+                                    <PageLoader
+                                       text={"Registering"}
+                                       color={"#ffffff"}
+                                       loading={pageLoader}
+                                    />
+                                 ) : (
+                                    "Register"
+                                 )}
                               </button>
                            </div>
                         </>

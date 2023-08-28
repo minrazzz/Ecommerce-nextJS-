@@ -4,12 +4,10 @@ import { GlobalContext } from "@/context/global-context";
 import { adminNavOptions, navOptions } from "@/utils/nav-options";
 import { Fragment, useContext } from "react";
 import CommonModel from "./commonModel";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 const isAdminView = false;
-const isAuthUser = true;
-const user = {
-   role: "admin",
-};
 
 function NavItems({ isModalView = false }) {
    return (
@@ -76,13 +74,26 @@ function HamburgerMenu({ setShowNavModal }) {
 
 export default function Navbar() {
    const { showNavModal, setShowNavModal } = useContext(GlobalContext);
+   const { user, isAuthUser, setIsAuthUser, setUser } =
+      useContext(GlobalContext);
+   // console.log(user, isAuthUser, "navbar");
+   const router = useRouter();
+
+   const handleLogout = () => {
+      setIsAuthUser(false);
+      setUser(null);
+      Cookies.remove("token");
+      localStorage.clear();
+      router.push("/");
+   };
+
    return (
       <>
          <nav className="bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200 ">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                <div className="flex items-center cursor-pointer">
                   <span className="self-center text-2xl font-semibold whitespace-nowrap  ">
-                     Ecommercery
+                     Ecom
                   </span>
                </div>
                <div className="flex md:order-2 gap-2">
@@ -128,6 +139,7 @@ export default function Navbar() {
                         className={
                            "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upper-case tracking-wide text-white rounded"
                         }
+                        onClick={handleLogout}
                      >
                         Logout
                      </button>
@@ -136,6 +148,7 @@ export default function Navbar() {
                         className={
                            "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upper-case tracking-wide text-white rounded"
                         }
+                        onClick={() => router.push("/login")}
                      >
                         Login
                      </button>

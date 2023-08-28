@@ -11,6 +11,7 @@ export default function GlobalState({ children }) {
    const [commonLoader, setCommonLoader] = useState(false);
    const [isAuthUser, setIsAuthUser] = useState(null);
    const [user, setUser] = useState(null);
+   const [pageLoader, setPageLoader] = useState(false);
 
    //since when we reload the children page the state of the hooks gets null
    useEffect(() => {
@@ -36,6 +37,8 @@ export default function GlobalState({ children }) {
             setIsAuthUser,
             user,
             setUser,
+            pageLoader,
+            setPageLoader,
          }}
       >
          {children}
