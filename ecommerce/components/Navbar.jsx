@@ -7,7 +7,7 @@ import CommonModel from "./commonModel";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
 
-function NavItems({ isModalView = false, isAdminView }) {
+function NavItems({ isModalView = false, isAdminView, router }) {
    return (
       <>
          <div
@@ -22,6 +22,7 @@ function NavItems({ isModalView = false, isAdminView }) {
                        <li
                           key={item.id}
                           className="cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0"
+                          onClick={() => router.push(item.path)}
                        >
                           {item.label}
                        </li>
@@ -30,6 +31,7 @@ function NavItems({ isModalView = false, isAdminView }) {
                        <li
                           key={item.id}
                           className="cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0"
+                          onClick={() => router.push(item.path)}
                        >
                           {item.label}
                        </li>
@@ -163,14 +165,18 @@ export default function Navbar() {
                   <HamburgerMenu setShowNavModal={setShowNavModal} />
                </div>
 
-               <NavItems isAdminView={isAdminView} />
+               <NavItems isAdminView={isAdminView} router={router} />
             </div>
          </nav>
          <CommonModel
             show={showNavModal}
             setShow={setShowNavModal}
             mainContent={
-               <NavItems isModalView={true} isAdminView={isAdminView} />
+               <NavItems
+                  isModalView={true}
+                  isAdminView={isAdminView}
+                  router={router}
+               />
             }
             showModalTitle={false}
          />
