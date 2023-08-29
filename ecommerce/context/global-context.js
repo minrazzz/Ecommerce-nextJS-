@@ -8,10 +8,13 @@ export const GlobalContext = createContext(null); //store a createContext in a v
 //then create a function that takes {children} as parameter and then return the GlobalContext.provider with value props wrap {children} inside it
 export default function GlobalState({ children }) {
    const [showNavModal, setShowNavModal] = useState(false);
-   const [commonLoader, setCommonLoader] = useState(false);
    const [isAuthUser, setIsAuthUser] = useState(null);
    const [user, setUser] = useState(null);
    const [pageLoader, setPageLoader] = useState(false);
+   const [compoLevelLoader, setCompoLevelLoader] = useState({
+      loading: false,
+      id: "",
+   });
 
    //since when we reload the children page the state of the hooks gets null
    useEffect(() => {
@@ -31,14 +34,14 @@ export default function GlobalState({ children }) {
          value={{
             showNavModal,
             setShowNavModal,
-            commonLoader,
-            setCommonLoader,
             isAuthUser,
             setIsAuthUser,
             user,
             setUser,
             pageLoader,
             setPageLoader,
+            compoLevelLoader,
+            setCompoLevelLoader,
          }}
       >
          {children}

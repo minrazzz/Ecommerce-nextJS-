@@ -6,7 +6,8 @@ import PageLoader from "@/components/loader/PageLoader";
 import { GlobalContext } from "@/context/global-context";
 import { registrationFormControls } from "@/utils/nav-options";
 import { useRouter } from "next/navigation";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const initialFormData = {
    name: "",
@@ -18,7 +19,8 @@ const initialFormData = {
 export default function register() {
    const [formData, setFormData] = useState(initialFormData);
    const [isRegistered, setIsRegistered] = useState(false);
-   const { pageLoader, setPageLoader } = useContext(GlobalContext);
+   const { pageLoader, setPageLoader, isAuthUser, user } =
+      useContext(GlobalContext);
    const router = useRouter();
 
    function isFormValid() {
@@ -35,15 +37,24 @@ export default function register() {
 
    async function handleRegisterOnSubmit() {
       setPageLoader(true);
-
       const data = await registerNewUser(formData);
       console.log(data);
-      if (data.success) {
+      if (data?.success) {
          setIsRegistered(true);
+         setPageLoader(false);
          setFormData(initialFormData);
       } else {
+         toast.error(data?.message, {
+            position: toast.POSITION.TOP_RIGHT,
+         });
+         setPageLoader(false);
+         setFormData(initialFormData);
       }
    }
+
+   useEffect(() => {
+      if (isAuthUser) router.push("/");
+   }, [isAuthUser]);
 
    return (
       <div className="bg-white relative">

@@ -2,12 +2,13 @@
 
 import { login } from "@/backend/services/login/loginService";
 import InputComponent from "@/components/form-elements/InputComponent";
-import PageLoader from "@/components/loader/PageLoader";
+import CompoLevelLoader from "@/components/loader/CompoLevelLoader";
 import { GlobalContext } from "@/context/global-context";
 import { loginFormControls } from "@/utils/nav-options";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import React, { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const initialFormData = {
    email: "",
@@ -16,8 +17,14 @@ const initialFormData = {
 
 export default function page() {
    const [formData, setFormData] = useState(initialFormData);
-   const { isAuthUser, setIsAuthUser, user, setUser } =
-      useContext(GlobalContext);
+   const {
+      isAuthUser,
+      setIsAuthUser,
+      user,
+      setUser,
+      compoLevelLoader,
+      setCompoLevelLoader,
+   } = useContext(GlobalContext);
    const { pageLoader, setPageLoader } = useContext(GlobalContext);
 
    // console.log(formData);
@@ -34,11 +41,14 @@ export default function page() {
    }
 
    async function handleLogin() {
-      setPageLoader(true);
+      setCompoLevelLoader({ loading: true, id: "" });
       const response = await login(formData);
       if (response.success) {
-         setPageLoader(false);
+         toast.success(response?.message, {
+            position: toast.POSITION.TOP_RIGHT,
+         });
          setIsAuthUser(true);
+         setPageLoader(false);
          setUser(response?.finalData?.user);
          setFormData(initialFormData);
          Cookies.set("token", response?.finalData?.token);
@@ -46,6 +56,14 @@ export default function page() {
             "user",
             JSON.stringify(response?.finalData?.user)
          );
+         setCompoLevelLoader({ loading: false, id: "" });
+      } else {
+         toast.error(response?.message, {
+            position: toast.POSITION.TOP_RIGHT,
+         });
+         console.log(response?.message);
+         setIsAuthUser(false);
+         setCompoLevelLoader({ loading: false, id: "" });
       }
    }
 
@@ -87,11 +105,11 @@ export default function page() {
                            disabled={!isFormValid()}
                            onClick={handleLogin}
                         >
-                           {pageLoader ? (
-                              <PageLoader
+                           {compoLevelLoader && compoLevelLoader.loading ? (
+                              <CompoLevelLoader
                                  text={"signing in"}
                                  color={"#ffffff"}
-                                 loading={pageLoader}
+                                 loading={compoLevelLoader}
                               />
                            ) : (
                               "Login"
