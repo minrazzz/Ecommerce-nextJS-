@@ -20,11 +20,11 @@ export default function page() {
    const {
       isAuthUser,
       setIsAuthUser,
-      user,
       setUser,
       compoLevelLoader,
       setCompoLevelLoader,
    } = useContext(GlobalContext);
+
    const { pageLoader, setPageLoader } = useContext(GlobalContext);
 
    // console.log(formData);
@@ -48,7 +48,6 @@ export default function page() {
             position: toast.POSITION.TOP_RIGHT,
          });
          setIsAuthUser(true);
-         setPageLoader(false);
          setUser(response?.finalData?.user);
          setFormData(initialFormData);
          Cookies.set("token", response?.finalData?.token);

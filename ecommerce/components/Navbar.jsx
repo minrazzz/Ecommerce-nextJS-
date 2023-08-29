@@ -5,11 +5,9 @@ import { adminNavOptions, navOptions } from "@/utils/nav-options";
 import { Fragment, useContext } from "react";
 import CommonModel from "./commonModel";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
-const isAdminView = false;
-
-function NavItems({ isModalView = false }) {
+function NavItems({ isModalView = false, isAdminView }) {
    return (
       <>
          <div
@@ -76,8 +74,11 @@ export default function Navbar() {
    const { showNavModal, setShowNavModal } = useContext(GlobalContext);
    const { user, isAuthUser, setIsAuthUser, setUser } =
       useContext(GlobalContext);
-   // console.log(user, isAuthUser, "navbar");
    const router = useRouter();
+   const pathName = usePathname();
+   // console.log(pathName);
+
+   const isAdminView = pathName.includes("/admin-view");
 
    const handleLogout = () => {
       setIsAuthUser(false);
@@ -91,7 +92,10 @@ export default function Navbar() {
       <>
          <nav className="bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200 ">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-               <div className="flex items-center cursor-pointer">
+               <div
+                  onClick={() => router.push("/")}
+                  className="flex items-center cursor-pointer"
+               >
                   <span className="self-center text-2xl font-semibold whitespace-nowrap  ">
                      Ecom
                   </span>
@@ -121,6 +125,7 @@ export default function Navbar() {
                            className={
                               "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upper-case tracking-wide text-white rounded"
                            }
+                           onClick={() => router.push("/")}
                         >
                            client
                         </button>
@@ -129,6 +134,7 @@ export default function Navbar() {
                            className={
                               "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upper-case tracking-wide text-white rounded"
                            }
+                           onClick={() => router.push("/admin-view")}
                         >
                            Admin View
                         </button>
@@ -157,13 +163,15 @@ export default function Navbar() {
                   <HamburgerMenu setShowNavModal={setShowNavModal} />
                </div>
 
-               <NavItems />
+               <NavItems isAdminView={isAdminView} />
             </div>
          </nav>
          <CommonModel
             show={showNavModal}
             setShow={setShowNavModal}
-            mainContent={<NavItems isModalView={true} />}
+            mainContent={
+               <NavItems isModalView={true} isAdminView={isAdminView} />
+            }
             showModalTitle={false}
          />
       </>

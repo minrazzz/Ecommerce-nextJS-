@@ -19,8 +19,7 @@ const initialFormData = {
 export default function register() {
    const [formData, setFormData] = useState(initialFormData);
    const [isRegistered, setIsRegistered] = useState(false);
-   const { pageLoader, setPageLoader, isAuthUser, user } =
-      useContext(GlobalContext);
+   const { pageLoader, setPageLoader, isAuthUser } = useContext(GlobalContext);
    const router = useRouter();
 
    function isFormValid() {
