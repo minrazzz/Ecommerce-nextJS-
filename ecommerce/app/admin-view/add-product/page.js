@@ -1,8 +1,11 @@
 "use client";
 
+import { addNewproduct } from "@/backend/services/product/product";
 import TileComponent from "@/components/TileComponent/TileComponent";
 import InputComponent from "@/components/form-elements/InputComponent";
 import SelectComponent from "@/components/form-elements/SelectComponent";
+import CompoLevelLoader from "@/components/loader/CompoLevelLoader";
+import { GlobalContext } from "@/context/global-context";
 import {
    firebaseConfig,
    firebaseStorageURL,
@@ -19,7 +22,9 @@ import {
    ref,
    uploadBytesResumable,
 } from "firebase/storage";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useContext, useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const createUniqueFileName = (getFile) => {
    const timeStamp = Date.now();
@@ -68,13 +73,13 @@ const initialFormData = {
 
 export default function AdminAddNewProduct() {
    const [formData, setFormData] = useState(initialFormData);
+   const { compoLevelLoader, setCompoLevelLoader } = useContext(GlobalContext);
+   const router = useRouter();
 
    async function handleImage(event) {
-      // console.log(event.target.files[0]);
       const extractImageUrl = await helperForUploadingImageToFirebase(
          event.target.files[0]
       );
-      // console.log(extractImageUrl);
       if (extractImageUrl !== "") {
          setFormData({
             ...formData,
@@ -86,7 +91,6 @@ export default function AdminAddNewProduct() {
    function handleTileClick(getCurrentItem) {
       let cpySizes = [...formData.sizes];
       const index = cpySizes.findIndex((item) => item.id === getCurrentItem.id);
-
       //if any of the id is not matched above then the index becomes -1
       if (index === -1) {
          cpySizes.push(getCurrentItem);
@@ -99,7 +103,26 @@ export default function AdminAddNewProduct() {
       });
    }
 
-   console.log(formData);
+   async function handleAddProduct() {
+      setCompoLevelLoader({ loading: true, id: "" });
+      const response = await addNewproduct(formData);
+      console.log(response);
+      if (response.success) {
+         setCompoLevelLoader({ loading: false, id: "" });
+         toast.success(response?.message, {
+            position: toast.POSITION.TOP_RIGHT,
+         });
+         setFormData(initialFormData);
+         setTimeout(() => {
+            router.push("/admin-view/all-products");
+         }, 1000);
+      } else {
+         setCompoLevelLoader({ loading: false, id: "" });
+         toast.error(response?.message, {
+            position: toast.POSITION.TOP_RIGHT,
+         });
+      }
+   }
 
    return (
       <div className="w-full mt-5 mr-0 mb-0 ml-0 relative">
@@ -123,11 +146,12 @@ export default function AdminAddNewProduct() {
                {adminAddProductformControls.map((controlItem) =>
                   controlItem.componentType === "input" ? (
                      <InputComponent
+                        name={controlItem.id}
                         key={controlItem.id}
                         type={controlItem.type}
                         placeholder={controlItem.placeholder}
                         label={controlItem.label}
-                        value={initialFormData[controlItem.id]}
+                        value={formData[controlItem.id]}
                         onChange={(e) =>
                            setFormData({
                               ...formData,
@@ -140,7 +164,7 @@ export default function AdminAddNewProduct() {
                         key={controlItem.id}
                         label={controlItem.label}
                         options={controlItem.options}
-                        value={initialFormData[controlItem.id]}
+                        value={formData[controlItem.id]}
                         onChange={(e) =>
                            setFormData({
                               ...formData,
@@ -150,8 +174,19 @@ export default function AdminAddNewProduct() {
                      />
                   ) : null
                )}
-               <button className="inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white uppercase font-medium tracking-wide">
-                  Add Product
+               <button
+                  onClick={handleAddProduct}
+                  className="inline-flex w-full items-center justify-center bg-black px-6 py-4 text-lg text-white uppercase font-medium tracking-wide"
+               >
+                  {compoLevelLoader && compoLevelLoader.loading ? (
+                     <CompoLevelLoader
+                        text={"Adding Product"}
+                        color={"#ffffff"}
+                        loading={compoLevelLoader && compoLevelLoader.loading}
+                     />
+                  ) : (
+                     "Add Product"
+                  )}
                </button>
             </div>
          </div>

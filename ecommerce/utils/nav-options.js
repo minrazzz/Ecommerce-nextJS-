@@ -107,7 +107,7 @@ export const adminAddProductformControls = [
    },
    {
       id: "price",
-      type: "text",
+      type: "number",
       placeholder: "Enter price",
       label: "Price",
       componentType: "input",
@@ -166,7 +166,7 @@ export const adminAddProductformControls = [
    },
    {
       id: "priceDrop",
-      type: "text",
+      type: "number",
       placeholder: "Enter Price Drop",
       label: "Price Drop",
       componentType: "input",

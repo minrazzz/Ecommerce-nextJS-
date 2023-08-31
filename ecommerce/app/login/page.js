@@ -108,7 +108,9 @@ export default function page() {
                               <CompoLevelLoader
                                  text={"signing in"}
                                  color={"#ffffff"}
-                                 loading={compoLevelLoader}
+                                 loading={
+                                    compoLevelLoader && compoLevelLoader.loading
+                                 }
                               />
                            ) : (
                               "Login"

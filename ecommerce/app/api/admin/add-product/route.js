@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 const addNewProductSchema = Joi.object({
    name: Joi.string().required(),
    description: Joi.string().required(),
-   Price: Joi.number().required(),
+   price: Joi.number().required(),
    category: Joi.string().required(),
    sizes: Joi.array().required(),
    deliveryInfo: Joi.string().required(),
