@@ -15,7 +15,6 @@ const schema = Joi.object({
 
 export async function POST(req) {
    await connectDB();
-
    const { email, password } = await req.json();
    // console.log(email, password);
    const { error } = schema.validate({ email, password });
