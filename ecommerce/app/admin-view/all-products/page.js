@@ -1,3 +1,5 @@
+import CommonList from "@/components/comm-prod-compo/CommonList";
+
 export default function AdminAllNewProduct() {
-   return <div>All product</div>;
+   return <CommonList />;
 }
