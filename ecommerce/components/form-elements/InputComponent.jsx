@@ -20,7 +20,7 @@ export default function InputComponent({
                placeholder={placeholder}
                value={value}
                onChange={onChange}
-               className="border placeholder-gray-400 focus:outline-none focus:border-black w-full p-4 mr-0 mt-0 ml-0 text-base bg-white border-gray-300"
+               className="border placeholder-gray-400 focus:outline-none focus:border-[#BF1206] w-full p-4 mr-0 mt-0 ml-0 text-base bg-white border-gray-300"
             />
          </div>
       </>

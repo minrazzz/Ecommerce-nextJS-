@@ -61,7 +61,7 @@ const storage = getStorage(app, firebaseStorageURL);
 
 const initialFormData = {
    name: "",
-   price: 0,
+   Price: 0,
    description: "",
    category: "men",
    sizes: [],
@@ -73,6 +73,7 @@ const initialFormData = {
 
 export default function AdminAddNewProduct() {
    const [formData, setFormData] = useState(initialFormData);
+   console.log(formData.price);
    const { compoLevelLoader, setCompoLevelLoader } = useContext(GlobalContext);
    const router = useRouter();
 
@@ -106,7 +107,7 @@ export default function AdminAddNewProduct() {
    async function handleAddProduct() {
       setCompoLevelLoader({ loading: true, id: "" });
       const response = await addNewproduct(formData);
-      console.log(response);
+
       if (response.success) {
          setCompoLevelLoader({ loading: false, id: "" });
          toast.success(response?.message, {
@@ -152,24 +153,25 @@ export default function AdminAddNewProduct() {
                         placeholder={controlItem.placeholder}
                         label={controlItem.label}
                         value={formData[controlItem.id]}
-                        onChange={(e) =>
-                           setFormData({
-                              ...formData,
-                              [controlItem.id]: e.target.value,
-                           })
+                        onChange={(event) =>
+                           setFormData((prev) => ({
+                              ...prev,
+                              [controlItem.id]: event.target.value,
+                           }))
                         }
                      />
                   ) : controlItem.componentType === "select" ? (
                      <SelectComponent
+                        name={controlItem.id}
                         key={controlItem.id}
                         label={controlItem.label}
                         options={controlItem.options}
                         value={formData[controlItem.id]}
-                        onChange={(e) =>
-                           setFormData({
-                              ...formData,
-                              [controlItem.id]: e.target.value,
-                           })
+                        onChange={(event) =>
+                           setFormData((prev) => ({
+                              ...prev,
+                              [controlItem.id]: event.target.value,
+                           }))
                         }
                      />
                   ) : null

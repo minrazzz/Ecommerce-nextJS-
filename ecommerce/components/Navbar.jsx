@@ -11,17 +11,17 @@ function NavItems({ isModalView = false, isAdminView, router }) {
    return (
       <>
          <div
-            className={`items-center justify-between w-full md:flex md:w-auto ${
+            className={`items-center bg-red-700 justify-between w-full   px-9 py-3 shadow-md rounded-md  md:flex md:w-auto  ${
                isModalView === true ? "" : "hidden"
             }`}
             id="nav-items"
          >
-            <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium  rounded-lg md:flex-row md:space-x-8 md:mt-0 md:border-0 bg-white">
+            <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium     rounded-sm md:flex-row md:space-x-8 md:mt-0 md:border-0 ">
                {isAdminView
                   ? adminNavOptions.map((item) => (
                        <li
                           key={item.id}
-                          className="cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0"
+                          className="cursor-pointer block py-2 pl-3 pr-4 hover:text-black   text-white rounded md:p-0"
                           onClick={() => router.push(item.path)}
                        >
                           {item.label}
@@ -30,7 +30,7 @@ function NavItems({ isModalView = false, isAdminView, router }) {
                   : navOptions.map((item) => (
                        <li
                           key={item.id}
-                          className="cursor-pointer block py-2 pl-3 pr-4 text-gray-900 rounded md:p-0"
+                          className="cursor-pointer block py-2 pl-3 pr-4 text-white rounded md:p-0"
                           onClick={() => router.push(item.path)}
                        >
                           {item.label}
@@ -92,13 +92,13 @@ export default function Navbar() {
 
    return (
       <>
-         <nav className="bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200 ">
+         <nav className="bg-white fixed w-full z-20 top-0 left-0 border-b border-red-700 ">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
                <div
                   onClick={() => router.push("/")}
-                  className="flex items-center cursor-pointer"
+                  className="flex items-center cursor-pointer bg-red-700 px-1 py-3 rounded-full shadow-md "
                >
-                  <span className="self-center text-2xl font-semibold whitespace-nowrap  ">
+                  <span className="self-center hover:text-black text-2xl font-semibold whitespace-nowrap text-white  ">
                      Ecom
                   </span>
                </div>
@@ -145,7 +145,7 @@ export default function Navbar() {
                   {isAuthUser ? (
                      <button
                         className={
-                           "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upper-case tracking-wide text-white rounded"
+                           "mt-1.5 inline-block bg-red-700 px-5 py-3 text-xs font-medium upper-case tracking-wide text-white rounded"
                         }
                         onClick={handleLogout}
                      >
@@ -154,7 +154,7 @@ export default function Navbar() {
                   ) : (
                      <button
                         className={
-                           "mt-1.5 inline-block bg-black px-5 py-3 text-xs font-medium upper-case tracking-wide text-white rounded"
+                           "mt-1.5 inline-block bg-green-700 px-5 py-3 text-xs font-medium upper-case tracking-wide text-white rounded"
                         }
                         onClick={() => router.push("/login")}
                      >

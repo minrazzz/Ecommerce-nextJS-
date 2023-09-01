@@ -106,7 +106,7 @@ export const adminAddProductformControls = [
       componentType: "input",
    },
    {
-      id: "price",
+      id: "Price",
       type: "number",
       placeholder: "Enter price",
       label: "Price",
