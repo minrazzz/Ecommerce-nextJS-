@@ -48,3 +48,18 @@ export const deleteProduct = async (id) => {
       console.log(error);
    }
 };
+
+export const productByCategory = async (id) => {
+   try {
+      const response = await fetch(
+         `http://localhost:3000/api/client/product-by-category?id=${id}`,
+         {
+            method: "GET",
+         }
+      );
+      const data = await response.json();
+      return data;
+   } catch (error) {
+      console.log(error);
+   }
+};

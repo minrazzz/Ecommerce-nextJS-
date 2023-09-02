@@ -2,7 +2,7 @@
 
 import { GlobalContext } from "@/context/global-context";
 import { adminNavOptions, navOptions } from "@/utils/nav-options";
-import { Fragment, useContext } from "react";
+import { Fragment, useContext, useEffect } from "react";
 import CommonModel from "./commonModel";
 import Cookies from "js-cookie";
 import { usePathname, useRouter } from "next/navigation";
@@ -73,14 +73,28 @@ function HamburgerMenu({ setShowNavModal }) {
 }
 
 export default function Navbar() {
-   const { showNavModal, setShowNavModal } = useContext(GlobalContext);
+   const {
+      showNavModal,
+      setShowNavModal,
+      currentUpdatedProduct,
+      setCurrentUpdatedProduct,
+   } = useContext(GlobalContext);
+
    const { user, isAuthUser, setIsAuthUser, setUser } =
       useContext(GlobalContext);
    const router = useRouter();
    const pathName = usePathname();
-   // console.log(pathName);
-
    const isAdminView = pathName.includes("/admin-view");
+
+   // to make the updatedProduct Details null if it outside the add-product
+   useEffect(() => {
+      if (
+         pathName !== "/admin-view/add-product" &&
+         currentUpdatedProduct !== null
+      ) {
+         setCurrentUpdatedProduct(null);
+      }
+   }, [pathName]);
 
    const handleLogout = () => {
       setIsAuthUser(false);

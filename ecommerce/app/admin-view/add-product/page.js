@@ -1,6 +1,9 @@
 "use client";
 
-import { addNewproduct } from "@/backend/services/product/product";
+import {
+   addNewproduct,
+   updateProduct,
+} from "@/backend/services/product/product";
 import TileComponent from "@/components/TileComponent/TileComponent";
 import InputComponent from "@/components/form-elements/InputComponent";
 import SelectComponent from "@/components/form-elements/SelectComponent";
@@ -73,9 +76,21 @@ const initialFormData = {
 
 export default function AdminAddNewProduct() {
    const [formData, setFormData] = useState(initialFormData);
-   console.log(formData.price);
-   const { compoLevelLoader, setCompoLevelLoader } = useContext(GlobalContext);
+
+   const {
+      compoLevelLoader,
+      setCompoLevelLoader,
+      currentUpdatedProduct,
+      setCurrentUpdatedProduct,
+   } = useContext(GlobalContext);
    const router = useRouter();
+
+   //for the updated feature: onClick to button navigate to the addProduct with required info form GlobalContext
+   useEffect(() => {
+      if (currentUpdatedProduct !== null) {
+         setFormData(currentUpdatedProduct);
+      }
+   }, [currentUpdatedProduct]);
 
    async function handleImage(event) {
       event.preventDefault();
@@ -107,7 +122,10 @@ export default function AdminAddNewProduct() {
 
    async function handleAddProduct() {
       setCompoLevelLoader({ loading: true, id: "" });
-      const response = await addNewproduct(formData);
+      const response =
+         currentUpdatedProduct !== null
+            ? await updateProduct(formData)
+            : await addNewproduct(formData);
 
       if (response.success) {
          setCompoLevelLoader({ loading: false, id: "" });
@@ -183,12 +201,18 @@ export default function AdminAddNewProduct() {
                >
                   {compoLevelLoader && compoLevelLoader.loading ? (
                      <CompoLevelLoader
-                        text={"Adding Product"}
+                        text={
+                           currentUpdatedProduct !== null
+                              ? "updating product"
+                              : "add product"
+                        }
                         color={"#ffffff"}
                         loading={compoLevelLoader && compoLevelLoader.loading}
                      />
+                  ) : currentUpdatedProduct !== null ? (
+                     "UPDATE PRODUCT"
                   ) : (
-                     "Add Product"
+                     "ADD PRODUCT"
                   )}
                </button>
             </div>

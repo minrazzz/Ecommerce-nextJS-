@@ -15,6 +15,7 @@ export default function GlobalState({ children }) {
       loading: false,
       id: "",
    });
+   const [currentUpdatedProduct, setCurrentUpdatedProduct] = useState(null);
 
    //since when we reload the children page the state of the hooks gets null
    useEffect(() => {
@@ -42,6 +43,8 @@ export default function GlobalState({ children }) {
             setPageLoader,
             compoLevelLoader,
             setCompoLevelLoader,
+            currentUpdatedProduct,
+            setCurrentUpdatedProduct,
          }}
       >
          {children}

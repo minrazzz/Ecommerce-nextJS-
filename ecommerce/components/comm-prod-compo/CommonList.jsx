@@ -1,10 +1,18 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import ProductButtons from "./ProductButtons";
 import ProductTile from "./ProductTile";
-// const data = [1, 2, 3, 4, 5];
+import { useEffect } from "react";
 
 export default function CommonList({ data }) {
+   const router = useRouter();
+
+   // whenever we add and update a prod,this will reload the page and we get new product
+   useEffect(() => {
+      router.refresh();
+   }, []);
+
    return (
       <section className="bg-white py-12 sm:py-15">
          <div className="mx-auto max-w-screen-xl px-4 sm:px-6 lg:px-8">
