@@ -85,7 +85,7 @@ export default function page() {
                            item.componentType === "input" ? (
                               <InputComponent
                                  key={key}
-                                 type={item.type}
+                                 type={item?.type}
                                  placeholder={item.placeholder}
                                  label={item.label}
                                  value={formData[item.id]}

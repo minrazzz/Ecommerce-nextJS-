@@ -78,6 +78,7 @@ export default function AdminAddNewProduct() {
    const router = useRouter();
 
    async function handleImage(event) {
+      event.preventDefault();
       const extractImageUrl = await helperForUploadingImageToFirebase(
          event.target.files[0]
       );

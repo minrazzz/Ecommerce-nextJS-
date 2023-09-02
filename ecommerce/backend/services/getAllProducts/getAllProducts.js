@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 export const getAllProducts = async () => {
    try {
       const response = await fetch(
@@ -5,6 +7,10 @@ export const getAllProducts = async () => {
          {
             method: "GET",
             cache: "no-store",
+            headers: {
+               "content-type": "application/json",
+               Authorization: `Bearer${Cookies.get("token")}`,
+            },
          }
       );
       const data = response.json();
